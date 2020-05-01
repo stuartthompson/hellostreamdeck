@@ -1,4 +1,7 @@
+mod server;
+
 use std::env;
+use std::sync::mpsc;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -23,8 +26,6 @@ fn main() {
         }
     }
 
-    println!("Port: {0}", port);
-    println!("PluginUUID: {0}", plugin_uuid);
-    println!("RegisterEvent: {0}", register_event);
-    println!("Info: {0}", info);
+    let (_tx, rx) = mpsc::channel();
+    server::start_server(port, plugin_uuid, register_event, info, rx);
 }
