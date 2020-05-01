@@ -1,0 +1,5 @@
+# Cargo.toml
+
+[package]
+name = "hellosd"
+version = "1.0.0"
