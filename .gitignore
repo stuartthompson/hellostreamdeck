@@ -1,0 +1,5 @@
+# VSCode config files
+.vscode
+
+# Build output
+target
