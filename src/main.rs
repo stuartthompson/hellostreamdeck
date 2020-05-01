@@ -1,7 +1,11 @@
+extern crate websocket;
+
 mod server;
 
 use std::env;
 use std::sync::mpsc;
+
+
 
 fn main() {
     let args: Vec<String> = env::args().collect();

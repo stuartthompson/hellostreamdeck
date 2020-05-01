@@ -3,3 +3,6 @@
 [package]
 name = "hellosd"
 version = "1.0.0"
+
+[dependencies]
+websocket = "0.24.0"

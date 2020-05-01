@@ -4,10 +4,67 @@ use std::sync::mpsc::{Receiver, TryRecvError};
 use std::thread;
 use std::time::Duration;
 
+use websocket::sync::Server;
+use websocket::OwnedMessage;
+
 const IP: &str = "127.0.0.1";
 const MSG_SIZE: usize = 512;
 
 pub fn start_server(
+    port: String,
+    plugin_uuid: String,
+    register_event: String,
+    info: String,
+    rx: Receiver<bool>
+) {
+    // Build address
+    let addr = format!("{0}:{1}", IP, port);
+
+    // Create server
+    let server = Server::bind(addr).unwrap();
+
+    for request in server.filter_map(Result::ok) {
+        // Spawn a new thread for each connection
+        thread::spawn(|| {
+            if !request.protocols().contains(&"rust-websocket".to_string()) {
+                request.reject().unwrap();
+                return;
+            }
+
+            let mut client = request.use_protocol("rust-websocket").accept().unwrap();
+
+            let ip = client.peer_addr().unwrap();
+
+            println!("Connection from {}", ip);
+
+            let message = OwnedMessage::Text("Hello".to_string());
+            client.send_message(&message).unwrap();
+
+            let (mut receiver, mut sender) = client.split().unwrap();
+
+            for message in receiver.incoming_messages() {
+                let message = message.unwrap();
+
+                match message {
+                    OwnedMessage::Close(_) => {
+                        let message = OwnedMessage::Close(None);
+                        sender.send_message(&message).unwrap();
+                        println!("Client {} disconnected.", ip);
+                        return;
+                    }
+                    OwnedMessage::Ping(ping) => {
+                        let message = OwnedMessage::Pong(ping);
+                        sender.send_message(&message).unwrap();
+                        println!("Client {} ping.", ip);
+                    }
+                    _ => sender.send_message(&message).unwrap(),
+                }
+            }
+        });
+    }
+}
+
+pub fn start_server_old(
     port: String,
     plugin_uuid: String,
     register_event: String,
