@@ -1,0 +1,35 @@
+{
+    "Actions": [
+        {
+            "Icon": "actionIcon",
+            "Name": "Hello",
+            "States": [
+                {
+                    "Image": "actionDefaultImage",
+                    "TitleAlignment": "middle",
+                    "FontSize": "16"
+                }
+            ],
+            "SupportedInMultiActions": false,
+            "Tooltip": "Hello, StreamDeck!",
+            "UUID": "com.latharael.hellostreamdeck.hello.action"
+        }
+    ],
+    "SDKVersion": 2,
+    "Author": "Stuart Thompson",
+    "CodePath": "code.html",
+    "Description": "Says Hello to the Elgato StreamDeck",
+    "Name": "HelloStreamDeck",
+    "Icon": "pluginIcon",
+    "URL": "https://www.github.com/stuartthompson/hellostreamdeck",
+    "Version": "1.0",
+    "OS": [
+        {
+            "Platform": "windows",
+            "MinimumVersion": "10"
+        }
+    ],
+    "Software": {
+        "MinimumVersion": "4.1"
+    }
+}
